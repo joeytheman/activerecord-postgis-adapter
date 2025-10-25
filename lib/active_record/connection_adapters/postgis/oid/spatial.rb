@@ -25,10 +25,12 @@ module ActiveRecord
           #   has_z:    false
           #   has_m:    false
           def self.parse_sql_type(sql_type)
-            geo_type = nil
+            geo_type = "geometry"
             srid = 0
             has_z = false
             has_m = false
+
+            return [geo_type, srid, has_z, has_m, false] if sql_type.nil?
 
             if sql_type =~ /(geography|geometry)\((.*)\)$/i
               # geometry(Point)
@@ -53,10 +55,9 @@ module ActiveRecord
           end
 
           def spatial_factory
-            @spatial_factory ||=
-              RGeo::ActiveRecord::SpatialFactoryStore.instance.factory(
-                factory_attrs
-              )
+            RGeo::ActiveRecord::SpatialFactoryStore.instance.factory(
+              factory_attrs
+            )
           end
 
           def spatial?

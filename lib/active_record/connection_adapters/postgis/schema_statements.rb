@@ -27,6 +27,7 @@ module ActiveRecord
 
           SpatialColumn.new(
             column_name,
+            get_oid_type(oid.to_i, fmod.to_i, column_name, type),
             default_value,
             type_metadata,
             !notnull,
